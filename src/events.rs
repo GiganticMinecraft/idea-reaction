@@ -1,8 +1,10 @@
-use crate::config::ENV_CONFIG;
+use crate::config::{load_config, ENV_CONFIG};
 use serenity::async_trait;
 use serenity::client::Context;
+use serenity::model::channel::Message;
 use serenity::model::gateway::{Activity, Ready};
-use serenity::model::prelude::{ChannelId, GuildId, Webhook};
+use serenity::model::id::WebhookId;
+use serenity::model::prelude::{ChannelId, GuildId, ReactionType};
 use serenity::prelude::EventHandler;
 use tracing::log::info;
 
@@ -10,6 +12,47 @@ pub struct EvHandler;
 
 #[async_trait]
 impl EventHandler for EvHandler {
+    async fn message(&self, ctx: Context, message: Message) {
+        if message.is_private() {
+            return;
+        }
+
+        let env_config = ENV_CONFIG.get().unwrap();
+
+        let channel_id = message.channel_id;
+        if channel_id != ChannelId(env_config.target_channel_id) {
+            return;
+        }
+
+        match message.webhook_id {
+            Some(id) => {
+                if id != WebhookId(env_config.target_webhook_id) {
+                    return;
+                }
+
+                let embed = message.embeds.first().unwrap();
+                let embed_title = embed.title.as_ref().unwrap();
+                if !embed_title.contains("[New issue]") {
+                    return;
+                }
+
+                let reactions = load_config().unwrap().reactions;
+                for reaction in reactions {
+                    if let Err(why) = message
+                        .react(&ctx.http, ReactionType::Unicode(reaction))
+                        .await
+                    {
+                        info!("Failed to react: {:?}", why);
+                    }
+                }
+
+                info!("Reacted to message: {}", message.id);
+            }
+            None => {
+                return;
+            }
+        }
+    }
     async fn ready(&self, ctx: Context, bot: Ready) {
         let env_config = ENV_CONFIG.get().unwrap();
         info!(

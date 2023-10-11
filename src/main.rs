@@ -1,7 +1,8 @@
 use crate::client::discord::create_discord_client;
 use crate::config::{load_config, IdeaReactionEnv, ENV_CONFIG};
 use dotenvy::dotenv;
-use std::env;
+
+use tracing::info;
 
 mod client;
 mod config;
@@ -18,7 +19,8 @@ async fn main() -> anyhow::Result<()> {
 
     let mut client = create_discord_client(&ENV_CONFIG.get().unwrap().discord_api_token).await?;
 
-    load_config()?;
+    let config = load_config()?;
+    info!("Loaded config: {:?}", config.reactions);
 
     if let Err(why) = client.start().await {
         println!("Failed run discord client: {:?}", why);
