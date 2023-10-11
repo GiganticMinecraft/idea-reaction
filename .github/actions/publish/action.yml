@@ -1,14 +1,8 @@
 name: Publish
 description: Publish the Docker package
 inputs:
-  major:
-    description: Major version number
-    required: true
-  minor:
-    description: Minor version number
-    required: true
-  patch:
-    description: Patch version number
+  tag:
+    description: Tag name
     required: true
   sha:
     description: Git SHA
@@ -36,6 +30,4 @@ runs:
         tags: |
           ghcr.io/giganticminecraft/idea_reaction:latest
           ghcr.io/giganticminecraft/idea_reaction:${{ inputs.sha }}
-          ghcr.io/giganticminecraft/idea_reaction:v${{ inputs.major }}
-          ghcr.io/giganticminecraft/idea_reaction:v${{ inputs.major }}.${{ inputs.minor }}
-          ghcr.io/giganticminecraft/idea_reaction:v${{ inputs.major }}.${{ inputs.minor }}.${{ inputs.patch }}
+          ghcr.io/giganticminecraft/idea_reaction:v${{ inputs.tag }}
