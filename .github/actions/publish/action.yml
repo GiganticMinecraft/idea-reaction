@@ -1,12 +1,5 @@
 name: Publish
 description: Publish the Docker package
-inputs:
-  tag:
-    description: Tag name
-    required: true
-  sha:
-    description: Git SHA
-    required: true
 
 runs:
   using: composite
@@ -29,5 +22,3 @@ runs:
         push: true
         tags: |
           ghcr.io/giganticminecraft/idea_reaction:latest
-          ghcr.io/giganticminecraft/idea_reaction:${{ inputs.sha }}
-          ghcr.io/giganticminecraft/idea_reaction:v${{ inputs.tag }}
