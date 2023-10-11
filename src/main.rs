@@ -1,7 +1,7 @@
 use crate::client::discord::create_discord_client;
 use crate::config::{load_config, IdeaReactionEnv, ENV_CONFIG};
 use dotenvy::dotenv;
-use std::env;
+
 use tracing::info;
 
 mod client;

@@ -3,7 +3,6 @@ use once_cell::sync::OnceCell;
 use serde::{Deserialize, Serialize};
 use std::fs::File;
 use std::io::BufReader;
-use tracing::log::info;
 
 #[derive(Default, Deserialize, Debug)]
 pub struct IdeaReactionConfig {
