@@ -29,7 +29,6 @@ pub fn load_config() -> anyhow::Result<IdeaReactionConfig> {
         panic!("No reactions found in config file");
     }
 
-    info!("Loaded config: {:?}", config.reactions);
     Ok(config)
 }
 
