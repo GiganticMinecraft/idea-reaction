@@ -2,8 +2,6 @@ name: Release idea-reaction-token
 
 on:
   push:
-    branches:
-      - main
     tag:
       - 'v*.*.*'
 
