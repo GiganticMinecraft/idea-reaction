@@ -1,6 +1,6 @@
 services:
   bot:
-    build: .
+    image: ghcr.io/giganticminecraft/idea-reaction:latest
     restart: always
     volumes:
       - ./config.yaml:/home/idea-reaction/assets/config.yaml
