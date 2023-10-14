@@ -21,4 +21,4 @@ runs:
       with:
         push: true
         tags: |
-          ghcr.io/giganticminecraft/idea_reaction:latest
+          ghcr.io/giganticminecraft/idea-reaction:latest
