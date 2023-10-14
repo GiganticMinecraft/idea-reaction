@@ -2,11 +2,11 @@ name: Release idea-reaction-token
 
 on:
   push:
-    tag:
-      - 'v*.*.*'
+    branches:
+      - main
 
 jobs:
-  release-please:
+  release:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -16,6 +16,3 @@ jobs:
 
       - name: Publish the Docker package
         uses: ./.github/actions/publish
-        with:
-          tag: ${{ steps.release.outputs.tag }}
-          sha: ${{ steps.release.outputs.sha }}
