@@ -16,3 +16,5 @@ jobs:
 
       - name: Publish the Docker package
         uses: ./.github/actions/publish
+        with:
+          sha: ${{ github.sha }}
