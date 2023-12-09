@@ -10,7 +10,7 @@ authors = ["m1sk9 <me@m1sk9.dev>"]
 [dependencies]
 anyhow = { version = "1.0.75" }
 dotenvy = { version = "0.15.7" }
-once_cell = { version = "1.18.0" }
+once_cell = { version = "1.19.0" }
 tracing = { version = "0.1.40" }
 tracing-subscriber = { version = "0.3.18" }
 serde = { version = "1.0.193", features = ["derive"] }
