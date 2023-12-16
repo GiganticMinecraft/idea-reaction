@@ -1,8 +1,9 @@
-use crate::config::{load_config, ENV_CONFIG};
+use crate::config::ENV_CONFIG;
 use serenity::async_trait;
 use serenity::client::Context;
+use serenity::gateway::ActivityData;
 use serenity::model::channel::Message;
-use serenity::model::gateway::{Activity, Ready};
+use serenity::model::gateway::Ready;
 use serenity::model::id::WebhookId;
 use serenity::model::prelude::{ChannelId, GuildId, ReactionType};
 use serenity::prelude::EventHandler;
@@ -20,13 +21,13 @@ impl EventHandler for EvHandler {
         let env_config = ENV_CONFIG.get().unwrap();
 
         let channel_id = message.channel_id;
-        if channel_id != ChannelId(env_config.target_channel_id) {
+        if channel_id != ChannelId::new(env_config.target_channel_id) {
             return;
         }
 
         match message.webhook_id {
             Some(id) => {
-                if id != WebhookId(env_config.target_webhook_id) {
+                if id != WebhookId::new(env_config.target_webhook_id) {
                     return;
                 }
 
@@ -36,10 +37,10 @@ impl EventHandler for EvHandler {
                     return;
                 }
 
-                let reactions = load_config().unwrap().reactions;
+                let reactions: Vec<&str> = vec!["👍", "👎"];
                 for reaction in reactions {
                     if let Err(why) = message
-                        .react(&ctx.http, ReactionType::Unicode(reaction))
+                        .react(&ctx.http, ReactionType::Unicode(reaction.to_string()))
                         .await
                     {
                         info!("Failed to react: {:?}", why);
@@ -61,13 +62,13 @@ impl EventHandler for EvHandler {
             id = bot.user.id
         );
 
-        let guild = GuildId(env_config.target_guild_id);
+        let guild = GuildId::new(env_config.target_guild_id);
         let channel = guild.channels(&ctx.http).await.unwrap();
 
-        match channel.get(&ChannelId(env_config.target_channel_id)) {
+        match channel.get(&ChannelId::new(env_config.target_channel_id)) {
             Some(channel) => {
                 info!("Watching channel: {}", channel.name);
-                ctx.set_activity(Activity::watching(&channel.name)).await;
+                ctx.set_activity(Some(ActivityData::watching(&channel.name)));
 
                 let webhook = channel.webhooks(&ctx.http).await.unwrap();
                 let target_webhook = webhook
