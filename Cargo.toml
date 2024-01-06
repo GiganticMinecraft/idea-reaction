@@ -14,7 +14,7 @@ once_cell = { version = "1.19.0" }
 tracing = { version = "0.1.40" }
 tracing-subscriber = { version = "0.3.18" }
 serde = { version = "1.0.195", features = ["derive"] }
-serde_yaml = { version = "0.9.29" }
+serde_yaml = { version = "0.9.30" }
 envy = { version = "0.4.2" }
 
 [dependencies.serenity]
