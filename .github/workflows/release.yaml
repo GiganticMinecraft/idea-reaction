@@ -1,9 +1,12 @@
 name: Release idea-reaction-token
 
 on:
-  push:
-    branches:
-      - main
+  workflow_dispatch:
+    inputs:
+      tag:
+        type: string
+        required: true
+        description: 'Release tag'
 
 jobs:
   release:
@@ -17,4 +20,4 @@ jobs:
       - name: Publish the Docker package
         uses: ./.github/actions/publish
         with:
-          sha: ${{ github.sha }}
+          tag: ${{ inputs.tag }}
