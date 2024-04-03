@@ -1,21 +1,38 @@
-use crate::client::discord::create_discord_client;
-use crate::config::{IdeaReactionEnv, ENV_CONFIG};
-use dotenvy::dotenv;
+use anyhow::Context;
+use events::EvHandler;
+use serenity::{all::GatewayIntents, Client};
 
-mod client;
-mod config;
 mod events;
+
+#[derive(serde::Serialize, serde::Deserialize, Debug)]
+pub struct IdeaReactionEnv {
+    pub discord_api_token: String,
+    pub target_channel_id: u64,
+    pub target_guild_id: u64,
+    pub target_webhook_id: u64,
+}
+
+pub fn envs() -> &'static IdeaReactionEnv {
+    static CACHE: std::sync::OnceLock<IdeaReactionEnv> = std::sync::OnceLock::new();
+    CACHE.get_or_init(|| envy::from_env().expect("Failed to load environment variables"))
+}
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
-    dotenv().ok();
+    if let Err(why) = dotenvy::dotenv() {
+        tracing::warn!("Failed to load .env file: {:?}", why);
+    }
+
+    let envs = envs();
+
     tracing_subscriber::fmt().compact().init();
 
-    ENV_CONFIG
-        .set(envy::from_env::<IdeaReactionEnv>().expect("Failed to load environment variables"))
-        .unwrap();
-
-    let mut client = create_discord_client(&ENV_CONFIG.get().unwrap().discord_api_token).await?;
+    let intents =
+        GatewayIntents::GUILD_MESSAGES | GatewayIntents::GUILDS | GatewayIntents::MESSAGE_CONTENT;
+    let mut client = Client::builder(&envs.discord_api_token, intents)
+        .event_handler(EvHandler)
+        .await
+        .context("Failed to create Discord client")?;
 
     if let Err(why) = client.start().await {
         println!("Failed run discord client: {:?}", why);
