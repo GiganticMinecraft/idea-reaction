@@ -22,11 +22,3 @@
 | `TARGET_CHANNEL_ID` | 監視対象チャンネルのID |
 | `TARGET_WEBHOOK_ID` | 監視対象WebhookのID |
 | `TARGET_GUILD_ID` | 監視対象ギルドのID |
-
-## Configuration
-
-- idea-reaction は `config.yaml` によって設定が変更可能です.
-
-```yaml
-reaction: ["👍", "👎"] # リアクションに使用する絵文字を文字列の配列(Vec)で指定する
-```
