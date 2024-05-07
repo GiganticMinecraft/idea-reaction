@@ -36,7 +36,7 @@ impl EventHandler for EvHandler {
 
                 let wb_embed = message.embeds.first().unwrap();
                 let wb_title = wb_embed.title.as_ref().unwrap();
-                if !wb_title.contains("[New Issue]") || wb_title.contains("アイデア会議議事録")
+                if !wb_title.contains("[New issue]") || wb_title.contains("アイデア会議議事録")
                 {
                     return;
                 }
