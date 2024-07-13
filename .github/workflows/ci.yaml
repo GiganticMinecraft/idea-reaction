@@ -1,19 +1,16 @@
-name: clippy
+name: CI
 
 on:
   push:
     branches:
       - main
-      - 'release/v*.*.*'
   pull_request:
     branches:
       - main
-      - 'release/v*.*.*'
 
 jobs:
-  clippy:
+  build:
     runs-on: ubuntu-latest
-    name: clippy idea-reaction
     steps:
       - name: Checkout branch
         uses: actions/checkout@v4
@@ -26,5 +23,11 @@ jobs:
         with:
           prefix-key: "idea-reaction/gh-actions-cache"
 
+      - name: Run rustfmt
+        run: cargo fmt --all -- --check
+
       - name: Run clippy
         run: cargo clippy --all-targets --all-features
+
+      - name: Run Build
+        run: cargo build --verbose
