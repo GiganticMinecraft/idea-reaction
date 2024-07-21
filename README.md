@@ -1,8 +1,6 @@
 # idea-reaction
 
-[![Build idea-reaction](https://github.com/GiganticMinecraft/idea-reaction/actions/workflows/build.yaml/badge.svg)](https://github.com/GiganticMinecraft/idea-reaction/actions/workflows/build.yaml)
-[![clippy](https://github.com/GiganticMinecraft/idea-reaction/actions/workflows/clippy.yaml/badge.svg)](https://github.com/GiganticMinecraft/idea-reaction/actions/workflows/clippy.yaml)
-[![rustfmt](https://github.com/GiganticMinecraft/idea-reaction/actions/workflows/fmt.yaml/badge.svg)](https://github.com/GiganticMinecraft/idea-reaction/actions/workflows/fmt.yaml)
+[![CI](https://github.com/GiganticMinecraft/idea-reaction/actions/workflows/ci.yaml/badge.svg)](https://github.com/GiganticMinecraft/idea-reaction/actions/workflows/ci.yaml)
 [![Release idea-reaction-token](https://github.com/GiganticMinecraft/idea-reaction/actions/workflows/release.yaml/badge.svg)](https://github.com/GiganticMinecraft/idea-reaction/actions/workflows/release.yaml)
 
 アイデア投稿履歴のリアクションを制限する Discord Bot.
