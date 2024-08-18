@@ -1,14 +1,10 @@
+use crate::actions::IdeaReactionAction;
+use crate::parsers::{parse_embed, parse_env_ids};
 use serenity::async_trait;
 use serenity::client::Context;
-use serenity::gateway::ActivityData;
 use serenity::model::channel::Message;
 use serenity::model::gateway::Ready;
-use serenity::model::id::WebhookId;
-use serenity::model::prelude::{ChannelId, GuildId};
 use serenity::prelude::EventHandler;
-use crate::actions::action_to_idea;
-use crate::envs;
-use crate::parsers::{parse_embed, parse_env_ids};
 
 pub struct Handler;
 
@@ -26,7 +22,7 @@ impl EventHandler for Handler {
                         return;
                     }
                     wb
-                },
+                }
                 None => return,
             }
         } else {
@@ -38,44 +34,17 @@ impl EventHandler for Handler {
             return;
         };
 
-        if let Err(why) = action_to_idea(&ctx, &message).await {
-            tracing::info!("Failed to react: {:?}", why);
+        let action = IdeaReactionAction::builder()
+            .ctx(ctx)
+            .message(message)
+            .build();
+        if let Err(why) = action.run().await {
+            tracing::info!("Failed to run action: {:?}", why);
         }
     }
 
     #[tracing::instrument(skip_all)]
-    async fn ready(&self, ctx: Context, ready: Ready) {
+    async fn ready(&self, _: Context, ready: Ready) {
         tracing::info!("{} is connected!", ready.user.name);
-
-        let version = env!("CARGO_PKG_VERSION");
-        let envs = envs();
-        let guild_id = GuildId::new(envs.target_guild_id);
-        let channels = guild_id.channels(&ctx.http).await.unwrap();
-
-        match channels.get(&ChannelId::new(envs.target_channel_id)) {
-            Some(ch) => {
-                let webhooks = ch.webhooks(&ctx.http).await.unwrap();
-                let target_wb = webhooks
-                    .iter()
-                    .find(|wb| wb.id == WebhookId::new(envs.target_webhook_id));
-
-                match target_wb {
-                    Some(w) => {
-                        tracing::info!("Watching webhook: {}", w.name.clone().unwrap());
-                    }
-                    None => {
-                        panic!("Target webhook is not found!");
-                    }
-                }
-
-                ctx.set_activity(Some(ActivityData::watching(format!(
-                    "v{} - Watching, #{}",
-                    version, &ch.name
-                ))))
-            }
-            None => {
-                panic!("Target channel is not found!");
-            }
-        }
     }
 }

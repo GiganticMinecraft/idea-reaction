@@ -2,9 +2,9 @@ use anyhow::Context;
 use handler::Handler;
 use serenity::{all::GatewayIntents, Client};
 
+mod actions;
 mod handler;
 mod parsers;
-mod actions;
 
 #[derive(serde::Serialize, serde::Deserialize, Debug)]
 pub struct IdeaReactionEnv {
