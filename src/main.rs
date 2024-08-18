@@ -46,8 +46,10 @@ async fn main() -> anyhow::Result<()> {
     Ok(())
 }
 
+#[cfg(test)]
 mod tests {
     use crate::parsers::parse_issue_number;
+
     #[test]
     fn test_parse_issue_number() {
         let mocks: [String; 2] = ["#13000".parse().unwrap(), "#1".parse().unwrap()];

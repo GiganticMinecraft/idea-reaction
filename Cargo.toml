@@ -15,6 +15,7 @@ tracing-subscriber = { version = "0.3.18" }
 serde = { version = "1.0.200", features = ["derive"] }
 envy = { version = "0.4.2" }
 typed-builder = { version = "0.19.1" }
+regex = { version = "1.10.6" }
 
 [dependencies.serenity]
 version = "0.12.1"
@@ -24,3 +25,7 @@ default-features = false
 [dependencies.tokio]
 version = "1.37.0"
 features = ["macros", "rt-multi-thread"]
+
+[dependencies.reqwest]
+version = "0.12.5"
+features = ["json"]
