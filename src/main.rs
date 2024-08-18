@@ -39,6 +39,11 @@ async fn main() -> anyhow::Result<()> {
         .await
         .context("Failed to create Discord client")?;
 
+    // https://github.com/GiganticMinecraft/idea-reaction/issues/107
+    if cfg!(feature = "experiments_thinking_emoji") {
+        tracing::info!("[experiments_thinking_emoji] が有効になっています. 🤔");
+    }
+
     if let Err(why) = client.start().await {
         println!("Failed run discord client: {:?}", why);
     }

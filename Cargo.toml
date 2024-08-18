@@ -15,7 +15,6 @@ anyhow = { version = "1.0.82" }
 dotenvy = { version = "0.15.7" }
 tracing = { version = "0.1.40" }
 tracing-subscriber = { version = "0.3.18" }
-serde = { version = "1.0.200", features = ["derive"] }
 envy = { version = "0.4.2" }
 typed-builder = { version = "0.19.1" }
 regex = { version = "1.10.6" }
@@ -24,6 +23,10 @@ regex = { version = "1.10.6" }
 version = "0.12.1"
 features = ["client", "gateway", "model", "cache", "rustls_backend"]
 default-features = false
+
+[dependencies.serde]
+version = "1.0.208"
+features = ["derive"]
 
 [dependencies.tokio]
 version = "1.37.0"
