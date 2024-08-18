@@ -3,7 +3,8 @@ FROM rust:1.80.1-bullseye as Builder
 WORKDIR /root/app
 COPY --chown=root:root . .
 
-RUN cargo build --release --bin idea-reaction
+# https://github.com/GiganticMinecraft/idea-reaction/issues/107
+RUN cargo build --release --bin idea-reaction --features experiments_thinking_emoji
 
 FROM debian:bullseye-slim as Runner
 
