@@ -16,6 +16,7 @@ tracing-subscriber = { version = "0.3.18" }
 serde = { version = "1.0.200", features = ["derive"] }
 serde_yaml = { version = "0.9.34" }
 envy = { version = "0.4.2" }
+typed-builder = { version = "0.19.1" }
 
 [dependencies.serenity]
 version = "0.12.1"
