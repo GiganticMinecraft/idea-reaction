@@ -1,3 +1,4 @@
+use crate::redmine::RedmineAction;
 use anyhow::Context as _;
 use serenity::all::{AutoArchiveDuration, ChannelType, ReactionType};
 use serenity::builder::CreateThread;
@@ -12,10 +13,13 @@ pub struct IdeaReactionAction {
     pub ctx: Context,
     pub message: Message,
     pub issue_title: String,
+    pub issue_number: u16,
 }
 
 impl IdeaReactionAction {
     pub async fn run(&self) -> anyhow::Result<()> {
+        let envs = crate::envs();
+
         // リアクションを付与
         for r in REACTION_EMOJIS {
             self.message
@@ -25,7 +29,8 @@ impl IdeaReactionAction {
         }
 
         // スレッドを作成
-        self.message
+        let t = self
+            .message
             .channel_id
             .create_thread_from_message(&self.ctx.http, &self.message.id, {
                 CreateThread::new(
@@ -38,6 +43,13 @@ impl IdeaReactionAction {
             })
             .await
             .context("Failed to create thread.")?;
+
+        // スレッドのURLを Redmine にコメントする. (Serenity はスレッドの URL を取得するメソッドがない)
+        let content = format!(
+            "Thread: https://discord.com/channels/{}/{}",
+            envs.target_guild_id, t.id
+        );
+        RedmineAction::run(self.issue_number, content).await?;
 
         Ok(())
     }

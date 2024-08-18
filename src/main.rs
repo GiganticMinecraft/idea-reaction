@@ -5,10 +5,13 @@ use serenity::{all::GatewayIntents, Client};
 mod actions;
 mod handler;
 mod parsers;
+mod redmine;
 
 #[derive(serde::Serialize, serde::Deserialize, Debug)]
 pub struct IdeaReactionEnv {
     pub discord_api_token: String,
+    pub redmine_api_key: String,
+    pub redmine_url: String,
     pub target_channel_id: u64,
     pub target_guild_id: u64,
     pub target_webhook_id: u64,
@@ -41,4 +44,18 @@ async fn main() -> anyhow::Result<()> {
     }
 
     Ok(())
+}
+
+#[cfg(test)]
+mod tests {
+    use crate::parsers::parse_issue_number;
+
+    #[test]
+    fn test_parse_issue_number() {
+        let mocks: [String; 2] = ["#13000".parse().unwrap(), "#1".parse().unwrap()];
+        mocks.iter().for_each(|m| {
+            let r = parse_issue_number(m.to_string());
+            assert_eq!(r, m[1..].parse::<u16>().unwrap());
+        });
+    }
 }
