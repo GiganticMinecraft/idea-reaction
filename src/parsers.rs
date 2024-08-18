@@ -30,3 +30,10 @@ pub fn parse_embed(embed: Option<&Embed>) -> anyhow::Result<Embed> {
         None => anyhow::bail!("Failed to parse embed"),
     }
 }
+
+pub fn parse_issue_number(title: String) -> u16 {
+    let re = regex::Regex::new(r"#(\d+)").unwrap();
+    re.captures(&title)
+        .map(|caps| caps.get(1).unwrap().as_str().parse::<u16>().ok().unwrap())
+        .unwrap()
+}
