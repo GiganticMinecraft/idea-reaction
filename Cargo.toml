@@ -10,12 +10,11 @@ authors = ["m1sk9 <me@m1sk9.dev>"]
 [dependencies]
 anyhow = { version = "1.0.82" }
 dotenvy = { version = "0.15.7" }
-once_cell = { version = "1.19.0" }
 tracing = { version = "0.1.40" }
 tracing-subscriber = { version = "0.3.18" }
 serde = { version = "1.0.200", features = ["derive"] }
-serde_yaml = { version = "0.9.34" }
 envy = { version = "0.4.2" }
+typed-builder = { version = "0.19.1" }
 
 [dependencies.serenity]
 version = "0.12.1"
