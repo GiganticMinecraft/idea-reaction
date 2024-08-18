@@ -6,6 +6,10 @@ use serenity::client::Context;
 use serenity::model::channel::Message;
 use typed_builder::TypedBuilder;
 
+#[cfg(feature = "experiments_thinking_emoji")]
+const REACTION_EMOJIS: [&str; 3] = ["👍", "👎", "🤔"];
+
+#[cfg(not(feature = "experiments_thinking_emoji"))]
 const REACTION_EMOJIS: [&str; 2] = ["👍", "👎"];
 
 #[derive(TypedBuilder)]
