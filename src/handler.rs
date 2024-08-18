@@ -1,4 +1,3 @@
-use serenity::all::ReactionType;
 use serenity::async_trait;
 use serenity::client::Context;
 use serenity::gateway::ActivityData;
@@ -7,8 +6,9 @@ use serenity::model::gateway::Ready;
 use serenity::model::id::WebhookId;
 use serenity::model::prelude::{ChannelId, GuildId};
 use serenity::prelude::EventHandler;
-
+use crate::actions::action_to_idea;
 use crate::envs;
+use crate::parsers::{parse_embed, parse_env_ids};
 
 pub struct Handler;
 
@@ -16,46 +16,30 @@ pub struct Handler;
 impl EventHandler for Handler {
     #[tracing::instrument(skip_all)]
     async fn message(&self, ctx: Context, message: Message) {
-        let envs = envs();
+        let target_ids = parse_env_ids().expect("Failed to parse environment IDs");
 
-        let channel_id = message.channel_id;
-        if channel_id != ChannelId::new(envs.target_channel_id) {
-            return;
-        }
-
-        match message.webhook_id {
-            Some(wb) => {
-                if wb != WebhookId::new(envs.target_webhook_id) {
-                    return;
-                }
-
-                let wb_embed = message.embeds.first();
-                if wb_embed.is_none() {
-                    return;
-                }
-
-                let wb_embed = message.embeds.first().unwrap();
-                let wb_title = wb_embed.title.as_ref().unwrap();
-                if !wb_title.contains("[New issue]") || wb_title.contains("アイデア会議議事録")
-                {
-                    return;
-                }
-
-                let reactions: Vec<&str> = vec!["👍", "👎"];
-                for reaction in reactions {
-                    if let Err(why) = message
-                        .react(&ctx.http, ReactionType::Unicode(reaction.to_string()))
-                        .await
-                    {
-                        tracing::info!("Failed to react: {:?}", why);
+        // メッセージが idea-reaction 監視対象の Webhook であるかを確認
+        if message.channel_id == target_ids.channel {
+            match message.webhook_id {
+                Some(wb) => {
+                    if wb != target_ids.webhook {
+                        return;
                     }
-                }
+                    wb
+                },
+                None => return,
+            }
+        } else {
+            return;
+        };
 
-                tracing::info!("Reacted to message: {}", message.id);
-            }
-            None => {
-                return;
-            }
+        if let Err(why) = parse_embed(message.embeds.first()) {
+            tracing::info!("Failed to parse embed: {:?}", why);
+            return;
+        };
+
+        if let Err(why) = action_to_idea(&ctx, &message).await {
+            tracing::info!("Failed to react: {:?}", why);
         }
     }
 
