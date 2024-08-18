@@ -1,8 +1,8 @@
 use anyhow::Context;
-use events::EvHandler;
+use handler::Handler;
 use serenity::{all::GatewayIntents, Client};
 
-mod events;
+mod handler;
 
 #[derive(serde::Serialize, serde::Deserialize, Debug)]
 pub struct IdeaReactionEnv {
@@ -30,7 +30,7 @@ async fn main() -> anyhow::Result<()> {
     let intents =
         GatewayIntents::GUILD_MESSAGES | GatewayIntents::GUILDS | GatewayIntents::MESSAGE_CONTENT;
     let mut client = Client::builder(&envs.discord_api_token, intents)
-        .event_handler(EvHandler)
+        .event_handler(Handler)
         .await
         .context("Failed to create Discord client")?;
 

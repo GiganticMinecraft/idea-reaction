@@ -10,10 +10,10 @@ use serenity::prelude::EventHandler;
 
 use crate::envs;
 
-pub struct EvHandler;
+pub struct Handler;
 
 #[async_trait]
-impl EventHandler for EvHandler {
+impl EventHandler for Handler {
     #[tracing::instrument(skip_all)]
     async fn message(&self, ctx: Context, message: Message) {
         let envs = envs();
