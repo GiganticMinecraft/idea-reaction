@@ -29,14 +29,18 @@ impl EventHandler for Handler {
             return;
         };
 
-        if let Err(why) = parse_embed(message.embeds.first()) {
-            tracing::info!("Failed to parse embed: {:?}", why);
-            return;
+        let embed = match parse_embed(message.embeds.first()) {
+            Ok(embed) => embed,
+            Err(why) => {
+                tracing::error!("Failed to parse embed: {:?}", why);
+                return;
+            }
         };
 
         let action = IdeaReactionAction::builder()
             .ctx(ctx)
             .message(message)
+            .issue_title(embed.title.unwrap())
             .build();
         if let Err(why) = action.run().await {
             tracing::info!("Failed to run action: {:?}", why);
