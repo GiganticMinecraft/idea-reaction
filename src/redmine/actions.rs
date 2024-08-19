@@ -1,10 +1,7 @@
-/// ref. https://github.com/GiganticMinecraft/IdeaDiscussionMaster/blob/main/c-infra/src/redmine/client/redmine_url_interpreter.rs
 use crate::envs;
 use crate::redmine::model::{RedmineIssue, RedmineIssueNotes};
-use anyhow::{anyhow, Context, Error};
+use anyhow::{anyhow, Context};
 use typed_builder::TypedBuilder;
-
-pub mod model;
 
 #[derive(TypedBuilder)]
 pub struct RedmineAction {
@@ -25,7 +22,7 @@ impl RedmineAction {
         format!("{}/issues/{}.json?key={}", self.url, id, self.api_key)
     }
 
-    pub async fn run(id: u16, content: String) -> anyhow::Result<(), Error> {
+    pub async fn run(id: u16, content: String) -> anyhow::Result<(), anyhow::Error> {
         let client = reqwest::Client::new();
 
         let url = RedmineAction::new().issue_url(id);
