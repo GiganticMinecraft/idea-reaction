@@ -1,4 +1,4 @@
-use crate::redmine::RedmineAction;
+use crate::redmine::actions::RedmineAction;
 use anyhow::Context as _;
 use serenity::all::{AutoArchiveDuration, ChannelType, ReactionType};
 use serenity::builder::CreateThread;
