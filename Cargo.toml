@@ -16,7 +16,7 @@ dotenvy = { version = "0.15.7" }
 tracing = { version = "0.1.40" }
 tracing-subscriber = { version = "0.3.18" }
 envy = { version = "0.4.2" }
-typed-builder = { version = "0.19.1" }
+typed-builder = { version = "0.20.0" }
 regex = { version = "1.10.6" }
 
 [dependencies.serenity]
