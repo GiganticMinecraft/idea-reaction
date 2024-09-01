@@ -45,9 +45,3 @@
 | `TARGET_CHANNEL_ID` | 監視対象チャンネルのID                         |
 | `TARGET_WEBHOOK_ID` | 監視対象WebhookのID                       |
 | `TARGET_GUILD_ID`   | 監視対象ギルドのID                           |
-
-## Feature Flags
-
-| Feature Flag                 | Description             |
-|------------------------------|-------------------------|
-| `experiments_thinking_emoji` | 付与されるリアクションに "🤔" を追加する |
