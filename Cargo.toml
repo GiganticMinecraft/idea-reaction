@@ -5,11 +5,6 @@ edition = "2021"
 description = "アイデア投稿履歴のリアクションを制限する Discord Bot"
 authors = ["m1sk9 <me@m1sk9.dev>"]
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
-
-[features]
-experiments_thinking_emoji = []
-
 [dependencies]
 anyhow = { version = "1.0.82" }
 dotenvy = { version = "0.15.7" }
