@@ -1,6 +1,7 @@
 use anyhow::Context;
 use handler::Handler;
 use serenity::{all::GatewayIntents, Client};
+use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 
 mod actions;
 mod handler;
@@ -24,14 +25,19 @@ pub fn envs() -> &'static IdeaReactionEnv {
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
+    tracing_subscriber::registry()
+        .with(
+            tracing_subscriber::EnvFilter::try_from_default_env()
+                .unwrap_or_else(|_| "idea_reaction=debug".into()),
+        )
+        .with(tracing_subscriber::fmt::layer().json())
+        .init();
+
     if let Err(why) = dotenvy::dotenv() {
         tracing::warn!("Failed to load .env file: {:?}", why);
     }
 
     let envs = envs();
-
-    tracing_subscriber::fmt().compact().init();
-
     let intents =
         GatewayIntents::GUILD_MESSAGES | GatewayIntents::GUILDS | GatewayIntents::MESSAGE_CONTENT;
     let mut client = Client::builder(&envs.discord_api_token, intents)
