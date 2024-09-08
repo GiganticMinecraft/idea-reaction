@@ -9,7 +9,6 @@ authors = ["m1sk9 <me@m1sk9.dev>"]
 anyhow = { version = "1.0.82" }
 dotenvy = { version = "0.15.7" }
 tracing = { version = "0.1.40" }
-tracing-subscriber = { version = "0.3.18" }
 envy = { version = "0.4.2" }
 typed-builder = { version = "0.20.0" }
 regex = { version = "1.10.6" }
@@ -26,6 +25,10 @@ features = ["derive"]
 [dependencies.tokio]
 version = "1.37.0"
 features = ["macros", "rt-multi-thread"]
+
+[dependencies.tracing-subscriber]
+version = "0.3.18"
+features = ["json", "env-filter"]
 
 [dependencies.reqwest]
 version = "0.12.5"
