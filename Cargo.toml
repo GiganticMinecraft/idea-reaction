@@ -6,31 +6,31 @@ description = "アイデア投稿履歴のリアクションを制限する Disc
 authors = ["m1sk9 <me@m1sk9.dev>"]
 
 [dependencies]
-anyhow = { version = "1.0.82" }
+anyhow = { version = "1.0.94" }
 dotenvy = { version = "0.15.7" }
-tracing = { version = "0.1.40" }
+tracing = { version = "0.1.41" }
 envy = { version = "0.4.2" }
 typed-builder = { version = "0.20.0" }
-regex = { version = "1.10.6" }
+regex = { version = "1.11.1" }
 sentry = { version = "0.35.0" }
 
 [dependencies.serenity]
-version = "0.12.1"
+version = "0.12.4"
 features = ["client", "gateway", "model", "cache", "rustls_backend"]
 default-features = false
 
 [dependencies.serde]
-version = "1.0.208"
+version = "1.0.216"
 features = ["derive"]
 
 [dependencies.tokio]
-version = "1.37.0"
+version = "1.42.0"
 features = ["macros", "rt-multi-thread"]
 
 [dependencies.tracing-subscriber]
-version = "0.3.18"
+version = "0.3.19"
 features = ["json", "env-filter"]
 
 [dependencies.reqwest]
-version = "0.12.5"
+version = "0.12.9"
 features = ["json"]
