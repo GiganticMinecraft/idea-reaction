@@ -12,6 +12,7 @@ tracing = { version = "0.1.40" }
 envy = { version = "0.4.2" }
 typed-builder = { version = "0.20.0" }
 regex = { version = "1.10.6" }
+sentry = { version = "0.35.0" }
 
 [dependencies.serenity]
 version = "0.12.1"

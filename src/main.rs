@@ -10,6 +10,7 @@ mod redmine;
 
 #[derive(serde::Serialize, serde::Deserialize, Debug)]
 pub struct IdeaReactionEnv {
+    pub env_name: String,
     pub discord_api_token: String,
     pub redmine_api_key: String,
     pub redmine_url: String,
@@ -38,6 +39,22 @@ async fn main() -> anyhow::Result<()> {
     }
 
     let envs = envs();
+
+    let _guard = if &envs.env_name == "production" {
+        let client = sentry::init((
+            "https://375598dccad7e5485d08aab0e5147e59@sentry.onp.admin.seichi.click//5",
+            sentry::ClientOptions {
+                release: sentry::release_name!(),
+                traces_sample_rate: 1.0,
+                ..Default::default()
+            },
+        ));
+        sentry::configure_scope(|s| s.set_level(Some(sentry::Level::Warning)));
+        Some(client)
+    } else {
+        None
+    };
+
     let intents =
         GatewayIntents::GUILD_MESSAGES | GatewayIntents::GUILDS | GatewayIntents::MESSAGE_CONTENT;
     let mut client = Client::builder(&envs.discord_api_token, intents)
