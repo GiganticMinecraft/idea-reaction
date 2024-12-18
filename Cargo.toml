@@ -2,8 +2,11 @@
 name = "idea-reaction"
 version = "0.6.0"
 edition = "2021"
-description = "アイデア投稿履歴のリアクションを制限する Discord Bot"
-authors = ["m1sk9 <me@m1sk9.dev>"]
+description = "アイデア投稿履歴のリアクションをサポートするDiscord Bot"
+authors = ["GiganticMinecraft"]
+license = "MIT"
+license-file = "LICENSE"
+repository = "https://github.com/GiganticMinecraft/idea-reaction"
 
 [dependencies]
 anyhow = { version = "1.0.94" }
