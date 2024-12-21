@@ -94,17 +94,17 @@ mod parsers_test {
             "[New issue] アイデア提案用プロジェクト - アイデア提案 #10925: 棒メニューに建築素材のみの購入メニュー"
         ];
 
-        assert_eq!(parse_issue_number(&mock[0]).unwrap(), 9);
-        assert_eq!(parse_issue_number(&mock[1]).unwrap(), 951);
-        assert_eq!(parse_issue_number(&mock[2]).unwrap(), 1527);
-        assert_eq!(parse_issue_number(&mock[3]).unwrap(), 10925);
+        assert_eq!(parse_issue_number(mock[0]).unwrap(), 9);
+        assert_eq!(parse_issue_number(mock[1]).unwrap(), 951);
+        assert_eq!(parse_issue_number(mock[2]).unwrap(), 1527);
+        assert_eq!(parse_issue_number(mock[3]).unwrap(), 10925);
     }
 
     // `parse_issue_number()` が Issue 番号がないタイトルのパースを正しく失敗できるか
     #[test]
     fn test_parse_issue_number_no_capture() {
         let mock = "[New issue] アイデア提案用プロジェクト - アイデア提案: 不定期イベントシステム";
-        let result = parse_issue_number(&mock);
+        let result = parse_issue_number(mock);
 
         assert!(result.is_err());
     }
