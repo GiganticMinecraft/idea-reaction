@@ -1,12 +1,19 @@
 use crate::envs;
 use crate::redmine::model::{RedmineIssue, RedmineIssueNotes};
-use anyhow::{anyhow, Context};
 use typed_builder::TypedBuilder;
 
 #[derive(TypedBuilder)]
 pub struct RedmineAction {
     url: String,
     api_key: String,
+}
+
+#[derive(thiserror::Error, Debug)]
+pub enum RedmineActionError {
+    #[error("Failed to send request to Redmine.")]
+    FailedToSendRequest,
+    #[error("{0}")]
+    FailedToPostComment(String),
 }
 
 impl RedmineAction {
@@ -22,7 +29,7 @@ impl RedmineAction {
         format!("{}/issues/{}.json?key={}", self.url, id, self.api_key)
     }
 
-    pub async fn run(id: u16, content: String) -> anyhow::Result<(), anyhow::Error> {
+    pub async fn run(id: u16, content: String) -> anyhow::Result<(), RedmineActionError> {
         let client = reqwest::Client::new();
 
         let url = RedmineAction::new().issue_url(id);
@@ -35,14 +42,13 @@ impl RedmineAction {
             .json(&body)
             .send()
             .await
-            .context("Failed to send request")?;
+            .map_err(|_| RedmineActionError::FailedToSendRequest)?;
 
         if res.status().is_success() {
             Ok(())
         } else {
-            Err(anyhow!(
-                "Failed to post comment. Reason: {}",
-                res.text().await?
+            Err(RedmineActionError::FailedToPostComment(
+                res.text().await.unwrap_or_default(),
             ))
         }
     }
