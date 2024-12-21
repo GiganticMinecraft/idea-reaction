@@ -5,7 +5,6 @@ edition = "2021"
 description = "アイデア投稿履歴のリアクションをサポートするDiscord Bot"
 authors = ["GiganticMinecraft"]
 license = "MIT"
-license-file = "LICENSE"
 repository = "https://github.com/GiganticMinecraft/idea-reaction"
 
 [dependencies]
