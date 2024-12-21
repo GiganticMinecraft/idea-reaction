@@ -29,10 +29,11 @@ impl EventHandler for Handler {
             return;
         };
 
-        if message.embeds.first().is_none() {
-            return;
+        let Some(first_embed) = message.embeds.first() else {
+            return
         };
-        let embed = match parse_embed(message.embeds.first().unwrap()) {
+
+        let embed = match parse_embed(first_embed) {
             Ok(embed) => embed,
             Err(why) => {
                 tracing::error!("Failed to parse embed: {:?}", why);

@@ -52,10 +52,10 @@ pub fn parse_embed(embed: &serenity::all::Embed) -> anyhow::Result<IdeaEmbed, Pa
     };
     let issue_number = parse_issue_number(title)?;
 
-    return Ok(IdeaEmbed::builder()
+    Ok(IdeaEmbed::builder()
         .title(title.clone())
         .issue_number(issue_number)
-        .build());
+        .build())
 }
 
 fn parse_issue_number(title: &String) -> anyhow::Result<u16, ParseEnvIDsError> {
@@ -64,7 +64,7 @@ fn parse_issue_number(title: &String) -> anyhow::Result<u16, ParseEnvIDsError> {
         Err(why) => return Err(ParseEnvIDsError::FailedToParseIssueNumber(why.to_string())),
     };
 
-    match re.captures(&title) {
+    match re.captures(title) {
         Some(caps) => match caps.get(1).unwrap().as_str().parse::<u16>() {
             Ok(num) => Ok(num),
             Err(why) => Err(ParseEnvIDsError::FailedToParseIssueNumber(why.to_string())),

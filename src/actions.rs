@@ -16,6 +16,8 @@ pub struct IdeaReactionAction {
 }
 
 #[derive(thiserror::Error, Debug)]
+// TODO(kisaragi): https://github.com/GiganticMinecraft/idea-reaction/pull/153 が済んだらヴァリアントの名前を変える
+#[expect(clippy::enum_variant_names)]
 pub enum IdeaReactionActionError {
     #[error("Failed to reaction. (Reason: {0})")]
     FailedToReaction(String),
