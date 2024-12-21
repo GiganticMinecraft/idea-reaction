@@ -14,7 +14,7 @@ impl RedmineAction {
         let envs = envs();
         RedmineAction::builder()
             .url(envs.redmine_url.clone())
-            .api_key(envs.redmine_api_key.clone())
+            .api_key(envs.redmine_api_key.clone().unwrap())
             .build()
     }
 
