@@ -10,13 +10,32 @@ mod redmine;
 
 #[derive(serde::Serialize, serde::Deserialize, Debug)]
 pub struct IdeaReactionEnv {
-    pub env_name: String,
+    #[serde(default)]
+    pub env_name: String, // default: development
+
     pub discord_api_token: String,
-    pub redmine_api_key: String,
-    pub redmine_url: String,
+    pub redmine_api_key: Option<String>,
+
+    #[serde(default)]
+    pub redmine_url: String, // default: https://localhost:8080
+
     pub target_channel_id: u64,
     pub target_guild_id: u64,
     pub target_webhook_id: u64,
+}
+
+impl Default for IdeaReactionEnv {
+    fn default() -> Self {
+        Self {
+            env_name: "development".to_string(),
+            discord_api_token: "".to_string(),
+            redmine_api_key: None,
+            redmine_url: "https://localhost:8080".to_string(),
+            target_channel_id: 0,
+            target_guild_id: 0,
+            target_webhook_id: 0,
+        }
+    }
 }
 
 pub fn envs() -> &'static IdeaReactionEnv {
