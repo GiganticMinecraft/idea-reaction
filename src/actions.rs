@@ -44,12 +44,14 @@ impl IdeaReactionAction {
             .await
             .context("Failed to create thread.")?;
 
-        // スレッドのURLを Redmine にコメントする. (Serenity はスレッドの URL を取得するメソッドがない)
-        let content = format!(
-            "Thread: https://discord.com/channels/{}/{}",
-            envs.target_guild_id, t.id
-        );
-        RedmineAction::run(self.issue_number, content).await?;
+        if envs.redmine_api_key.is_some() {
+            // スレッドのURLを Redmine にコメントする. (Serenity はスレッドの URL を取得するメソッドがない)
+            let content = format!(
+                "Thread: https://discord.com/channels/{}/{}",
+                envs.target_guild_id, t.id
+            );
+            RedmineAction::run(self.issue_number, content).await?;
+        }
 
         Ok(())
     }
