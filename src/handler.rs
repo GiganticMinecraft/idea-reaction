@@ -30,7 +30,7 @@ impl EventHandler for Handler {
         };
 
         let Some(first_embed) = message.embeds.first() else {
-            return
+            return;
         };
 
         let embed = match parse_embed(first_embed) {
