@@ -1,3 +1,5 @@
+#![deny(clippy::all)]
+
 use anyhow::Context;
 use handler::Handler;
 use serenity::{all::GatewayIntents, Client};
