@@ -52,19 +52,19 @@ pub fn parse_embed(embed: &serenity::all::Embed) -> anyhow::Result<IdeaEmbed, Pa
     };
     let issue_number = parse_issue_number(title)?;
 
-    return Ok(IdeaEmbed::builder()
+    Ok(IdeaEmbed::builder()
         .title(title.clone())
         .issue_number(issue_number)
-        .build());
+        .build())
 }
 
-fn parse_issue_number(title: &String) -> anyhow::Result<u16, ParseEnvIDsError> {
+fn parse_issue_number(title: &str) -> anyhow::Result<u16, ParseEnvIDsError> {
     let re = match regex::Regex::new(r"#(\d+)") {
         Ok(regex) => regex,
         Err(why) => return Err(ParseEnvIDsError::FailedToParseIssueNumber(why.to_string())),
     };
 
-    match re.captures(&title) {
+    match re.captures(title) {
         Some(caps) => match caps.get(1).unwrap().as_str().parse::<u16>() {
             Ok(num) => Ok(num),
             Err(why) => Err(ParseEnvIDsError::FailedToParseIssueNumber(why.to_string())),
@@ -94,17 +94,17 @@ mod parsers_test {
             "[New issue] アイデア提案用プロジェクト - アイデア提案 #10925: 棒メニューに建築素材のみの購入メニュー"
         ];
 
-        assert_eq!(parse_issue_number(&mock[0].to_string()).unwrap(), 9);
-        assert_eq!(parse_issue_number(&mock[1].to_string()).unwrap(), 951);
-        assert_eq!(parse_issue_number(&mock[2].to_string()).unwrap(), 1527);
-        assert_eq!(parse_issue_number(&mock[3].to_string()).unwrap(), 10925);
+        assert_eq!(parse_issue_number(mock[0]).unwrap(), 9);
+        assert_eq!(parse_issue_number(mock[1]).unwrap(), 951);
+        assert_eq!(parse_issue_number(mock[2]).unwrap(), 1527);
+        assert_eq!(parse_issue_number(mock[3]).unwrap(), 10925);
     }
 
     // `parse_issue_number()` が Issue 番号がないタイトルのパースを正しく失敗できるか
     #[test]
     fn test_parse_issue_number_no_capture() {
         let mock = "[New issue] アイデア提案用プロジェクト - アイデア提案: 不定期イベントシステム";
-        let result = parse_issue_number(&mock.to_string());
+        let result = parse_issue_number(mock);
 
         assert!(result.is_err());
     }
