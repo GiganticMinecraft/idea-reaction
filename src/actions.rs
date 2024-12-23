@@ -65,15 +65,15 @@ impl IdeaReactionAction {
             }
         };
 
-        // スレッドのURLを Redmine にコメントする. (Serenity はスレッドの URL を取得するメソッドがない)
-        let content = format!(
-            "Thread: https://discord.com/channels/{}/{}",
-            envs.target_guild_id, t.id
-        );
-        if let Err(why) = RedmineAction::run(self.issue_number, content).await {
-            return Err(IdeaReactionActionError::FailedToSendRedmineComment(
-                why.to_string(),
-            ));
+        if envs.redmine_api_key.is_some() {
+            // スレッドのURLを Redmine にコメントする. (Serenity はスレッドの URL を取得するメソッドがない)
+            let content = format!(
+                "Thread: https://discord.com/channels/{}/{}",
+                envs.target_guild_id, t.id
+            );
+            RedmineAction::run(self.issue_number, content)
+                .await
+                .map_err(|e| IdeaReactionActionError::FailedToSendRedmineComment(e.to_string()))?;
         }
 
         Ok(())
