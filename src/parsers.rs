@@ -59,16 +59,20 @@ pub fn parse_embed(embed: &serenity::all::Embed) -> anyhow::Result<IdeaEmbed, Pa
 }
 
 fn parse_issue_number(title: &str) -> anyhow::Result<u16, ParseEnvIDsError> {
-    let re = match regex::Regex::new(r"#(\d+)") {
-        Ok(regex) => regex,
-        Err(why) => return Err(ParseEnvIDsError::FailedToParseIssueNumber(why.to_string())),
-    };
+    let re = std::cell::LazyCell::new(|| regex::Regex::new(r"#(\d+)").unwrap());
 
     match re.captures(title) {
-        Some(caps) => match caps.get(1).unwrap().as_str().parse::<u16>() {
-            Ok(num) => Ok(num),
-            Err(why) => Err(ParseEnvIDsError::FailedToParseIssueNumber(why.to_string())),
-        },
+        Some(caps) => {
+            let Some(matched) = caps.get(1) else {
+                return Err(ParseEnvIDsError::FailedToParseIssueNumber(
+                    "Failed to get capture group.".to_string(),
+                ));
+            };
+            match matched.as_str().parse::<u16>() {
+                Ok(num) => Ok(num),
+                Err(why) => Err(ParseEnvIDsError::FailedToParseIssueNumber(why.to_string())),
+            }
+        }
         None => Err(ParseEnvIDsError::FailedToParseIssueNumber(
             "No captures found.".to_string(),
         )),
