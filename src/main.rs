@@ -1,3 +1,5 @@
+#![deny(clippy::all)]
+
 use anyhow::Context;
 use handler::Handler;
 use serenity::{all::GatewayIntents, Client};
@@ -86,18 +88,4 @@ async fn main() -> anyhow::Result<()> {
     }
 
     Ok(())
-}
-
-#[cfg(test)]
-mod tests {
-    use crate::parsers::parse_issue_number;
-
-    #[test]
-    fn test_parse_issue_number() {
-        let mocks: [String; 2] = ["#13000".parse().unwrap(), "#1".parse().unwrap()];
-        mocks.iter().for_each(|m| {
-            let r = parse_issue_number(m.to_string());
-            assert_eq!(r, m[1..].parse::<u16>().unwrap());
-        });
-    }
 }

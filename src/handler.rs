@@ -1,5 +1,5 @@
 use crate::actions::IdeaReactionAction;
-use crate::parsers::{parse_embed, parse_env_ids, parse_issue_number};
+use crate::parsers::{parse_embed, parse_env_ids};
 use serenity::async_trait;
 use serenity::client::Context;
 use serenity::model::channel::Message;
@@ -29,7 +29,11 @@ impl EventHandler for Handler {
             return;
         };
 
-        let embed = match parse_embed(message.embeds.first()) {
+        let Some(first_embed) = message.embeds.first() else {
+            return;
+        };
+
+        let embed = match parse_embed(first_embed) {
             Ok(embed) => embed,
             Err(why) => {
                 tracing::error!("Failed to parse embed: {:?}", why);
@@ -40,8 +44,8 @@ impl EventHandler for Handler {
         let action = IdeaReactionAction::builder()
             .ctx(ctx)
             .message(message)
-            .issue_title(embed.title.clone().unwrap())
-            .issue_number(parse_issue_number(embed.title.clone().unwrap()))
+            .issue_title(embed.title)
+            .issue_number(embed.issue_number)
             .build();
         if let Err(why) = action.run().await {
             tracing::info!("Failed to run action: {:?}", why);

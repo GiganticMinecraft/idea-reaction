@@ -1,5 +1,4 @@
 use crate::redmine::actions::RedmineAction;
-use anyhow::Context as _;
 use serenity::all::{AutoArchiveDuration, ChannelType, ReactionType};
 use serenity::builder::CreateThread;
 use serenity::client::Context;
@@ -16,20 +15,35 @@ pub struct IdeaReactionAction {
     pub issue_number: u16,
 }
 
+#[derive(thiserror::Error, Debug)]
+// TODO(kisaragi): https://github.com/GiganticMinecraft/idea-reaction/pull/153 が済んだらヴァリアントの名前を変える
+#[expect(clippy::enum_variant_names)]
+pub enum IdeaReactionActionError {
+    #[error("Failed to reaction. (Reason: {0})")]
+    FailedToReaction(String),
+    #[error("Failed to create thread. (Reason: {0})")]
+    FailedToCreateThread(String),
+    #[error("Failed to send request to Redmine. (Reason: {0})")]
+    FailedToSendRedmineComment(String),
+}
+
 impl IdeaReactionAction {
-    pub async fn run(&self) -> anyhow::Result<()> {
+    pub async fn run(&self) -> anyhow::Result<(), IdeaReactionActionError> {
         let envs = crate::envs();
 
         // リアクションを付与
         for r in REACTION_EMOJIS {
-            self.message
+            if let Err(why) = self
+                .message
                 .react(&self.ctx.http, ReactionType::Unicode(r.to_string()))
                 .await
-                .context("Failed to reaction.")?;
+            {
+                return Err(IdeaReactionActionError::FailedToReaction(why.to_string()));
+            }
         }
 
         // スレッドを作成
-        let t = self
+        let t = match self
             .message
             .channel_id
             .create_thread_from_message(&self.ctx.http, &self.message.id, {
@@ -42,7 +56,14 @@ impl IdeaReactionAction {
                 .auto_archive_duration(AutoArchiveDuration::OneWeek)
             })
             .await
-            .context("Failed to create thread.")?;
+        {
+            Ok(t) => t,
+            Err(why) => {
+                return Err(IdeaReactionActionError::FailedToCreateThread(
+                    why.to_string(),
+                ));
+            }
+        };
 
         if envs.redmine_api_key.is_some() {
             // スレッドのURLを Redmine にコメントする. (Serenity はスレッドの URL を取得するメソッドがない)
