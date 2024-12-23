@@ -71,7 +71,9 @@ impl IdeaReactionAction {
                 "Thread: https://discord.com/channels/{}/{}",
                 envs.target_guild_id, t.id
             );
-            RedmineAction::run(self.issue_number, content).await?;
+            RedmineAction::run(self.issue_number, content)
+                .await
+                .map_err(|e| IdeaReactionActionError::FailedToSendRedmineComment(e.to_string()))?;
         }
 
         Ok(())
