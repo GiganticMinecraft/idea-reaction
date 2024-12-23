@@ -59,10 +59,7 @@ pub fn parse_embed(embed: &serenity::all::Embed) -> anyhow::Result<IdeaEmbed, Pa
 }
 
 fn parse_issue_number(title: &str) -> anyhow::Result<u16, ParseEnvIDsError> {
-    let re = std::cell::LazyCell::new(|| {
-        let re = regex::Regex::new(r"#(\d+)").unwrap();
-        re
-    });
+    let re = std::cell::LazyCell::new(|| regex::Regex::new(r"#(\d+)").unwrap());
 
     match re.captures(title) {
         Some(caps) => {
