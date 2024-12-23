@@ -63,15 +63,14 @@ fn parse_issue_number(title: &str) -> anyhow::Result<u16, ParseEnvIDsError> {
 
     match re.captures(title) {
         Some(caps) => {
-            if let Some(matched) = caps.get(1) {
-                match matched.as_str().parse::<u16>() {
-                    Ok(num) => Ok(num),
-                    Err(why) => Err(ParseEnvIDsError::FailedToParseIssueNumber(why.to_string())),
-                }
-            } else {
-                Err(ParseEnvIDsError::FailedToParseIssueNumber(
+            let Some(matched) = caps.get(1) else {
+                return Err(ParseEnvIDsError::FailedToParseIssueNumber(
                     "Failed to get capture group.".to_string(),
-                ))
+                ));
+            };
+            match matched.as_str().parse::<u16>() {
+                Ok(num) => Ok(num),
+                Err(why) => Err(ParseEnvIDsError::FailedToParseIssueNumber(why.to_string())),
             }
         }
         None => Err(ParseEnvIDsError::FailedToParseIssueNumber(
