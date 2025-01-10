@@ -2,7 +2,7 @@
 
 services:
   redmine:
-    image: redmine:6.0.2-bookworm
+    image: redmine:5.1.5
     ports:
       - 8080:3000
     environment:
