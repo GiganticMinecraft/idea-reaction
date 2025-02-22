@@ -16,7 +16,7 @@ services:
       - vol_redmine:/usr/src/redmine/files
 
   redmine-db:
-    image: postgres:17.3-bullseye
+    image: postgres:17.4-bullseye
     ports:
       - 5432:5432
     environment:
