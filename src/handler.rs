@@ -1,5 +1,6 @@
 use crate::actions::IdeaReactionAction;
 use crate::parsers::{parse_embed, parse_env_ids};
+use serenity::all::ActivityData;
 use serenity::async_trait;
 use serenity::client::Context;
 use serenity::model::channel::Message;
@@ -53,7 +54,10 @@ impl EventHandler for Handler {
     }
 
     #[tracing::instrument(skip_all)]
-    async fn ready(&self, _: Context, ready: Ready) {
+    async fn ready(&self, ctx: Context, ready: Ready) {
+        ctx.set_activity(
+            ActivityData::custom(format!("Running v{}", env!("CARGO_PKG_VERSION"))).into(),
+        );
         tracing::info!("{} is connected!", ready.user.name);
     }
 }
