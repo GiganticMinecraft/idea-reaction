@@ -1,6 +1,6 @@
 [package]
 name = "idea-reaction"
-version = "0.6.3"
+version = "0.7.0"
 edition = "2021"
 description = "アイデア投稿履歴のリアクションをサポートするDiscord Bot"
 authors = ["GiganticMinecraft"]
