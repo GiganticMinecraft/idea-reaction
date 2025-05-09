@@ -2,6 +2,7 @@
 
 services:
   redmine:
+    # Specify the version of GiganticMinecraft Redmine
     image: redmine:5.1.5
     ports:
       - 8080:3000
@@ -16,7 +17,7 @@ services:
       - vol_redmine:/usr/src/redmine/files
 
   redmine-db:
-    image: postgres:17.2-bullseye
+    image: postgres:17.4-bullseye
     ports:
       - 5432:5432
     environment:

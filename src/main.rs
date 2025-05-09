@@ -63,7 +63,7 @@ async fn main() -> anyhow::Result<()> {
 
     let _guard = if &envs.env_name == "production" {
         let client = sentry::init((
-            "https://375598dccad7e5485d08aab0e5147e59@sentry.onp.admin.seichi.click//5",
+            "https://30bda4f81272fbe087c998d83ee5e960@sentry.onp.admin.seichi.click//6",
             sentry::ClientOptions {
                 release: sentry::release_name!(),
                 traces_sample_rate: 1.0,
