@@ -47,7 +47,7 @@ pub fn parse_embed(embed: &serenity::all::Embed) -> anyhow::Result<IdeaEmbed, Pa
         None => {
             return Err(ParseEnvIDsError::FailedToParseEmbed(
                 "Title does not exist in embed.".to_string(),
-            ))
+            ));
         }
     };
     let issue_number = parse_issue_number(title)?;
@@ -95,7 +95,7 @@ mod parsers_test {
             // https://redmine.seichi.click/issues/1527
             "[New issue] アイデア提案用プロジェクト - アイデア提案 #1527: 整地がメビウスなら建設にも成長する防具が",
             // https://redmine.seichi.click/issues/10925
-            "[New issue] アイデア提案用プロジェクト - アイデア提案 #10925: 棒メニューに建築素材のみの購入メニュー"
+            "[New issue] アイデア提案用プロジェクト - アイデア提案 #10925: 棒メニューに建築素材のみの購入メニュー",
         ];
 
         assert_eq!(parse_issue_number(mock[0]).unwrap(), 9);

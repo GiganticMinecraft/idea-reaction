@@ -2,7 +2,7 @@
 
 use anyhow::Context;
 use handler::Handler;
-use serenity::{all::GatewayIntents, Client};
+use serenity::{Client, all::GatewayIntents};
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 
 mod actions;
