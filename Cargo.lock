@@ -1055,7 +1055,7 @@ dependencies = [
  "dotenvy",
  "envy",
  "regex",
- "reqwest 0.12.20",
+ "reqwest 0.12.22",
  "sentry",
  "serde",
  "serenity",
@@ -1618,9 +1618,9 @@ dependencies = [
 
 [[package]]
 name = "reqwest"
-version = "0.12.20"
+version = "0.12.22"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "eabf4c97d9130e2bf606614eb937e86edac8292eaa6f422f995d7e8de1eb1813"
+checksum = "cbc931937e6ca3a06e3b6c0aa7841849b160a90351d6ab467a8b9b9959767531"
 dependencies = [
  "base64 0.22.1",
  "bytes",
@@ -1871,7 +1871,7 @@ checksum = "507ac2be9bf2da56c831da57faf1dadd81f434bd282935cdb06193d0c94e8811"
 dependencies = [
  "httpdate",
  "native-tls",
- "reqwest 0.12.20",
+ "reqwest 0.12.22",
  "sentry-actix",
  "sentry-backtrace",
  "sentry-contexts",
