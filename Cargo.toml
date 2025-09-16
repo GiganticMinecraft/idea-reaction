@@ -12,7 +12,7 @@ anyhow = { version = "1.0.94" }
 dotenvy = { version = "0.15.7" }
 tracing = { version = "0.1.41" }
 envy = { version = "0.4.2" }
-typed-builder = { version = "0.21.0" }
+typed-builder = { version = "0.22.0" }
 regex = { version = "1.11.1" }
 sentry = { version = "0.42.0" }
 thiserror = { version = "2.0.7" }
