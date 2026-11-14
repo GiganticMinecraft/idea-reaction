@@ -1,4 +1,4 @@
-FROM rust:1.99.0-trixie as Builder
+FROM rust:1.99.1-trixie as Builder
 
 WORKDIR /root/app
 COPY --chown=root:root . .
